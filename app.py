@@ -269,6 +269,11 @@ def home():
     return "Welcome to the Food & Nutrition Analyser!"
 
 
+@app.route("/health", methods=["GET"])
+def health():
+    return jsonify({"status": "ok"}), 200
+
+
 # 2. Food description validation
 @app.route("/api/analyse", methods=["POST"])
 def analyse_food():
@@ -391,4 +396,4 @@ def upload_image():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)

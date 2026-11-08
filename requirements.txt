@@ -1,4 +1,5 @@
 Flask
+gunicorn
 openai
 Pillow
 python-dotenv

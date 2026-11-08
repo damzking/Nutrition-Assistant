@@ -33,3 +33,19 @@ By default, Streamlit connects to Flask at `http://127.0.0.1:5000`. Set
 
 Uploaded images are analyzed in memory and are not saved to Supabase. The
 nutrition results are inserted into the `public.nutrition_analyses` table.
+
+## Deploy the Flask API to Render
+
+1. In Render, create a new Blueprint and select this GitHub repository. Render
+   will use [`render.yaml`](render.yaml) to build and start the API.
+2. Set `deepseek_api_key`, `SUPABASE_URL`, and `SUPABASE_SECRET_KEY` as secret
+   environment variables for the Flask service in Render. Do not put these
+   values in GitHub or in the Streamlit app.
+3. Wait for the deploy to finish, then open
+   `https://<your-render-service>.onrender.com/health`. A healthy service
+   returns `{"status":"ok"}`.
+4. Configure the Streamlit app's `FLASK_API_URL` to the Render service's base
+   URL.
+
+The health endpoint only checks that Flask is responding; it does not make
+requests to DeepSeek or Supabase.
