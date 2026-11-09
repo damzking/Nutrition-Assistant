@@ -2,6 +2,7 @@ import os
 
 import requests
 import streamlit as st
+from streamlit.errors import StreamlitSecretNotFoundError
 
 
 DEFAULT_API_URL = "http://127.0.0.1:5000"
@@ -32,9 +33,17 @@ st.set_page_config(page_title="Food & Nutrition Analyser", page_icon="🥗")
 st.title("Food & Nutrition Analyser")
 st.write("Upload a meal photo to estimate its calories and macronutrients.")
 
+try:
+    configured_api_url = st.secrets.get(
+        "FLASK_API_URL",
+        os.getenv("FLASK_API_URL", DEFAULT_API_URL),
+    )
+except StreamlitSecretNotFoundError:
+    configured_api_url = os.getenv("FLASK_API_URL", DEFAULT_API_URL)
+
 api_base_url = st.sidebar.text_input(
     "Flask API address",
-    value=os.getenv("FLASK_API_URL", DEFAULT_API_URL),
+    value=configured_api_url,
 ).strip().rstrip("/")
 uploaded_image = st.file_uploader(
     "Choose a food image",

@@ -45,7 +45,26 @@ nutrition results are inserted into the `public.nutrition_analyses` table.
    `https://<your-render-service>.onrender.com/health`. A healthy service
    returns `{"status":"ok"}`.
 4. Configure the Streamlit app's `FLASK_API_URL` to the Render service's base
-   URL.
+   URL as described below.
 
 The health endpoint only checks that Flask is responding; it does not make
 requests to DeepSeek or Supabase.
+
+## Deploy the Streamlit app to Community Cloud
+
+1. Sign in to [Streamlit Community Cloud](https://share.streamlit.io/) with the
+   GitHub account that can access this repository.
+2. Select **Create app**, choose this repository and the `main` branch, and set
+   the app file path to `streamlit_app.py`.
+3. Before deploying, open the app's **Advanced settings** and add the following
+   under **Secrets**, replacing the URL with your Render service's base URL:
+
+   ```toml
+   FLASK_API_URL = "https://<your-render-service>.onrender.com"
+   ```
+
+4. Deploy the app. It should open with the Flask API address prefilled. Upload
+   an image and select **Analyse image** to verify the end-to-end connection.
+
+Only the Flask API URL belongs in Streamlit settings. Keep the DeepSeek API key
+and Supabase secret key configured on Render, not in this app or its repository.
