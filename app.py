@@ -19,7 +19,8 @@ api_key = os.getenv("deepseek_api_key")
 client = OpenAI(
     api_key=api_key,
     base_url="https://api.deepseek.com",
-    timeout=30.0,
+    timeout=60.0,
+    max_retries=0,
 ) if api_key else None
 
 supabase_url = os.getenv("SUPABASE_URL", "").strip()
@@ -360,10 +361,14 @@ def upload_image():
         image.load()
 
         # Ask DeepSeek to analyse the photograph
+        app.logger.info("Starting DeepSeek image analysis.")
         analysis = analyse_food_image(image)
+        app.logger.info("DeepSeek image analysis completed.")
 
         try:
+            app.logger.info("Saving nutrition analysis to Supabase.")
             save_nutrition_analysis(analysis)
+            app.logger.info("Nutrition analysis saved to Supabase.")
         except Exception as error:
             app.logger.error(
                 "Saving nutrition analysis to Supabase failed (%s).",
